@@ -1,5 +1,7 @@
-package armagadon.com.videoflakes;
+package armagadon.com.videoflakes.View;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,6 +28,9 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import armagadon.com.videoflakes.R;
+import armagadon.com.videoflakes.ViewModel.VideoUrlViewModel;
+
 public class PlayVideo extends AppCompatActivity {
 
     private SimpleExoPlayerView playerView;
@@ -35,21 +40,31 @@ public class PlayVideo extends AppCompatActivity {
     private boolean playWhenReady = true;
     private int currentWindow;
 
-    public PlayVideo(String mp4Url) {
-        Mp4Url = mp4Url;
-    }
+    private static final String TAG = "ItemDetailsActivity";
+    private static final String VIDEO_URL = "VIDEO_URL";
+    private ActivityItemDetailsBinding activityItemDetailsBinding;
 
-    public  String Mp4Url;
+
+    public  String VideoUrl = "abc";
+
+    public PlayVideo() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_video);
-       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-     //   setSupportActionBar(toolbar);
 
-        playerView = findViewById(R.id.video_view);
 
+        activityItemDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_play_video);
+        getExtrasFromIntent();
+
+    }
+
+    public static Intent launchDetail(Context context, String VideoUrl) {
+        Intent intent = new Intent(context, PlayVideo.class);
+        intent.putExtra(VIDEO_URL , VideoUrl);
+        return intent;
     }
 
     @Override
@@ -92,7 +107,7 @@ public class PlayVideo extends AppCompatActivity {
         playerView.setPlayer(player);
         player.setPlayWhenReady(playWhenReady);
 
-        Uri uri = Uri.parse(Mp4Url);
+        Uri uri = Uri.parse(VIDEO_URL);
         MediaSource mediaSource = buildMediaSource(uri);
         player.prepare(mediaSource, true, false);
     }
@@ -126,6 +141,15 @@ public class PlayVideo extends AppCompatActivity {
             player.release();
             player = null;
         }
+    }
+
+    private void getExtrasFromIntent() {
+        if(getIntent()!=null){
+            String VideoUrl = getIntent().getStringExtra(VIDEO_URL);
+            VideoUrlViewModel videoUrlViewModel = new VideoUrlViewModel(VideoUrl);
+            activityItemDetailsBinding.;
+        }
+
     }
 }
 
