@@ -20,4 +20,4 @@ public class VideoUrlViewModel extends BaseObservable {
 
 
     }
-}
+

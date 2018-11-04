@@ -1,6 +1,8 @@
 package armagadon.com.videoflakes.ViewModel;
 
 import android.content.Context;
+import android.databinding.BaseObservable;
+import android.databinding.BindingAdapter;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -12,9 +14,10 @@ import armagadon.com.videoflakes.View.PlayVideo;
 public class GifVideoViewModel extends BaseObservable {
     private GifVideo item;
     private Context context;
+
     public GifVideoViewModel(GifVideo item, Context context) {
         this.item = item;
-        this.context=context;
+        this.context = context;
     }
 
     private static final String TAG = "ItemViewModel";
@@ -40,11 +43,10 @@ public class GifVideoViewModel extends BaseObservable {
 
     }
 
-    public void onClick(String VideoUrl) {
-        context.startActivity(PlayVideo.launchDetail(context, VideoUrl ));
-        Log.d(TAG, "onClick: " + VideoUrl);
+    public void onClick() {
+        context.startActivity(PlayVideo.launchDetail(context, getVideoUrl()));
+        Log.d(TAG, "onClick: " +getVideoUrl());
 
 
     }
-    {
 }

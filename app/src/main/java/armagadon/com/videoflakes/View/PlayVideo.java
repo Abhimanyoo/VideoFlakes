@@ -2,6 +2,7 @@ package armagadon.com.videoflakes.View;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -28,6 +29,8 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+//import armagadon.com.videoflakes.databinding.ActivityItemDetailsBinding;
+
 import armagadon.com.videoflakes.R;
 import armagadon.com.videoflakes.ViewModel.VideoUrlViewModel;
 
@@ -42,7 +45,7 @@ public class PlayVideo extends AppCompatActivity {
 
     private static final String TAG = "ItemDetailsActivity";
     private static final String VIDEO_URL = "VIDEO_URL";
-    private ActivityItemDetailsBinding activityItemDetailsBinding;
+   // private ActivityItemDetailsBinding activityItemDetailsBinding;
 
 
     public  String VideoUrl = "abc";
@@ -56,7 +59,7 @@ public class PlayVideo extends AppCompatActivity {
         setContentView(R.layout.activity_play_video);
 
 
-        activityItemDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_play_video);
+       // activityItemDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_play_video);
         getExtrasFromIntent();
 
     }
@@ -145,9 +148,8 @@ public class PlayVideo extends AppCompatActivity {
 
     private void getExtrasFromIntent() {
         if(getIntent()!=null){
-            String VideoUrl = getIntent().getStringExtra(VIDEO_URL);
-            VideoUrlViewModel videoUrlViewModel = new VideoUrlViewModel(VideoUrl);
-            activityItemDetailsBinding.;
+            VideoUrl = getIntent().getStringExtra(VIDEO_URL);
+
         }
 
     }
