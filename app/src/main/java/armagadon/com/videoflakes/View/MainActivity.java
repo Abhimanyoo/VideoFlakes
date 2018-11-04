@@ -1,8 +1,6 @@
 package armagadon.com.videoflakes.View;
 
-import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +12,7 @@ import android.view.View;
 
 import armagadon.com.videoflakes.R;
 import armagadon.com.videoflakes.databinding.ActivityMainBinding;
-import armagadon.com.videoflakes.ViewModel.MainViewModel;
+import armagadon.com.videoflakes.viewModel.MainViewModel;
 
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, LoadingCompletedListener {

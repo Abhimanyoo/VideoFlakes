@@ -2,19 +2,12 @@ package armagadon.com.videoflakes.View;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -32,7 +25,6 @@ import com.google.android.exoplayer2.util.Util;
 //import armagadon.com.videoflakes.databinding.ActivityItemDetailsBinding;
 
 import armagadon.com.videoflakes.R;
-import armagadon.com.videoflakes.ViewModel.VideoUrlViewModel;
 
 public class PlayVideo extends AppCompatActivity {
 

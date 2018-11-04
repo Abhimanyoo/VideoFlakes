@@ -1,4 +1,4 @@
-package armagadon.com.videoflakes.ViewModel;
+package armagadon.com.videoflakes.viewModel;
 
 import android.databinding.BaseObservable;
 

@@ -1,52 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
-    <data>
-        <variable
-            name="viewModel"
-            type="armagadon.com.videoflakes.ViewModel.MainViewModel"/>
-    </data>
-    <RelativeLayout
+    <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.example.shpocktask.view.ItemActivity">
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:visibility="@{viewModel.contentViewVisibility}"
-            android:id="@+id/swipe_refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:background="#ddd"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8dp">
+        tools:context="armagadon.com.videoflakes.view.MainActivity">
 
-            </android.support.v7.widget.RecyclerView>
+        <data>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:id="@+id/progress_bar"
-            android:visibility="@{viewModel.progressBarVisibility}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            <variable
+                name="mainViewModel"
+                type="armagadon.com.videoflakes.viewModel.MainViewModel" />
+        </data>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:id="@+id/error_info_layout"
-            android:visibility="@{viewModel.errorInfoLayoutVisibility}"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.exception}"/>
+                android:theme="@style/AppTheme.AppBarOverlay">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_giphy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
+
         </LinearLayout>
 
-    </RelativeLayout>
-
-</layout>
+    </layout>

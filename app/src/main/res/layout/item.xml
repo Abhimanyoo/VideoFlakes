@@ -1,48 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
+
         <variable
-            name="viewModel"
-            type="armagadon.com.videoflakes.ViewModel.GifVideoViewModel" />
+            name="GifVideoViewModel"
+            type="armagadon.com.videoflakes.viewModel.GifVideoViewModel" />
     </data>
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardUseCompatPadding="true"
-        android:clickable="true"
-        android:onClick="@{()->viewModel.onClick(viewModel.imageUrl)}">
+        android:layout_gravity="center">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/image_view_gif"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/cover"
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:layout_margin="8dp"
-                android:scaleType="centerCrop"
-                app:imageUrl="@{viewModel.imageUrl}" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                android:orientation="vertical">
-
-
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
+            android:layout_height="128dp"
+            tools:imageUrl="@{giphyViewModel.url}" />
+    </RelativeLayout>
 
 </layout>
