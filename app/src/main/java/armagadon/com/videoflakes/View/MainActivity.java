@@ -6,76 +6,107 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
+
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
+
+import java.util.concurrent.TimeUnit;
 
 import armagadon.com.videoflakes.R;
 import armagadon.com.videoflakes.databinding.ActivityMainBinding;
 import armagadon.com.videoflakes.viewModel.MainViewModel;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, LoadingCompletedListener {
-    private static final String TAG = "ItemActivity";
+public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding mainActivityBinding;
     private MainViewModel viewModel;
-    private ActivityMainBinding activityItemBinding;
+    private RecyclerViewAdapter adapter;
+    private GridLayoutManager layoutManager;
+    private boolean loading = true;
 
-    private ItemAdapter itemAdapter;
+    private RecyclerView.OnScrollListener endlessScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (dy > 0 && loading) {
+
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+
+                if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                    loading = false;
+                    viewModel.loadNewGifPackage();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityItemBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        initData();
+        initDataBinding();
+        initViews();
     }
 
-    private void initData() {
-        Log.d(TAG, "initData: ");
-        itemAdapter = new ItemAdapter(this);
-        activityItemBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        activityItemBinding.recyclerView.setItemAnimator(new DefaultItemAnimator());
-        activityItemBinding.recyclerView.setAdapter(itemAdapter);
-        activityItemBinding.swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-        activityItemBinding.swipeRefreshLayout.setOnRefreshListener(this);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        initSearch(searchView);
+
+        return true;
+    }
+
+    private void initDataBinding() {
+        mainActivityBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        activityItemBinding.setViewModel(viewModel);
-        viewModel.setLoadingCompletedListener(this);
-
-        viewModel.getItemsList().observe(this, itemList -> {
-            Log.d(TAG, "onChanged: " + itemList.size());
-            itemAdapter.setData(itemList);
-            itemAdapter.notifyDataSetChanged();
-
-        });
-
+        mainActivityBinding.setMainViewModel(viewModel);
+        mainActivityBinding.executePendingBindings();
+        subscribeDataStreams(viewModel);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (viewModel.errorInfoLayoutVisibility.get() == View.VISIBLE)
-            viewModel.refreshData();
-
-    }
-
-    @Override
-    public void onRefresh() {
-        itemAdapter.clearItems();
-        viewModel.refreshData();
+    private void subscribeDataStreams(MainViewModel viewModel) {
+        viewModel.getGifUrlsList().observe(this, urls -> adapter.setUrls(urls));
+        viewModel.isLoading().subscribe(isLoadingEnabled -> this.loading = isLoadingEnabled);
     }
 
 
-    @Override
-    public void onLoadingCompleted() {
-        if (activityItemBinding.swipeRefreshLayout.isRefreshing()) {
-            activityItemBinding.swipeRefreshLayout.setRefreshing(false);
-        }
+    private void initViews() {
+        setSupportActionBar(mainActivityBinding.toolbar);
+
+        layoutManager = new GridLayoutManager(this, 2);
+        adapter = new RecyclerViewAdapter(this);
+
+        RecyclerView recyclerView = mainActivityBinding.rvGiphy;
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addOnScrollListener(endlessScrollListener);
+        recyclerView.setAdapter(adapter);
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        viewModel.setLoadingCompletedListener(null);
+    private void initSearch(SearchView searchView) {
+        RxSearchView.queryTextChanges(searchView)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .filter(charSequence -> !TextUtils.isEmpty(charSequence))
+                .map(CharSequence::toString)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onNewSearchQueryEntered);
+    }
+
+    private void onNewSearchQueryEntered(String searchQuery) {
+        viewModel.setNewSearchQuery(searchQuery);
+        adapter.clear();
     }
 
 }

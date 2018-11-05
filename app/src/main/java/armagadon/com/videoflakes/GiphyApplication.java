@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 public class GiphyApplication  extends Application {
 
     private static GiphyService sGiphyAPI;
